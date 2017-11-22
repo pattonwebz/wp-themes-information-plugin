@@ -21,4 +21,4 @@ if ( ! defined( 'WPTIP_PLUGIN_DIR' ) ) {
 
 include WPTIP_PLUGIN_DIR . 'inc/class-wptip-theme-info.php';
 
-$wptip_info = new WPTIP_Theme_Info;
+$wptip_info = WPTIP_Theme_Info::init();
