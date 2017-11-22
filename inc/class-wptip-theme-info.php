@@ -150,6 +150,11 @@ class WPTIP_Theme_Info {
 				if ( $atts['field'] ) {
 					// TODO: check field is valid.
 					$field = $atts['field'];
+					// check if the field key passed is valid.
+					if ( ! $this->validate_field_id( $field ) ) {
+						// this is a fail, return false.
+						return false;
+					}
 					$data = $info->$field;
 					switch ( $atts['field'] ) {
 
@@ -198,5 +203,44 @@ class WPTIP_Theme_Info {
 				} // End if().
 			} // End if().
 		} // End if().
+	}
+
+	/**
+	 * An array of supported field keys.
+	 *
+	 * @return array the array of supported field keys.
+	 */
+	private function valid_field_ids() {
+		// TODO: Add ability to get 'sections', 'description' and 'tags' array.
+		$array = array(
+			'name',
+			'slug',
+			'version',
+			'preview_url',
+			'author',
+			'screenshot_url',
+			'rating',
+			'num_ratings',
+			'downloaded',
+			'last_updated',
+			'homepage',
+			'download_link',
+		);
+		return $array;
+	}
+	/**
+	 * Validate a field key string against the array of valid keys.
+	 *
+	 * @param  string $field  a field key.
+	 * @return booleen        true for valid, false for not valid.
+	 */
+	private function validate_field_id( $field ) {
+		// if the key is in the valid keys array then it's valid, otherwise
+		// it's invalid and should fail.
+		if ( in_array( $field, $this->valid_field_ids(), true ) ) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
