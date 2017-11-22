@@ -86,7 +86,8 @@ class WPTIP_Theme_Info {
 			if ( is_object( $info ) ) {
 				if ( $atts['field'] ) {
 					// TODO: check field is valid.
-					$data = $info->$atts['field'];
+					$field = $atts['field'];
+					$data = $info->$field;
 					switch ( $atts['field'] ) {
 
 						case 'preview_url':
@@ -119,14 +120,17 @@ class WPTIP_Theme_Info {
 
 					switch ( $sanitizer ) {
 						case 'absint':
-							echo '<span class="wptip-info">' . absint( $data ) . '</span>';
+							$html = '<span class="wptip-info">' . absint( $data ) . '</span>';
 							break;
 						case 'esc_url':
-							echo '<a href=" ' . esc_url( $data ) . '" class="wptip-info" alt="' . esc_attr( $info->sections->description ) . '">' . esc_html( $info->name ) . '</a>';
+							$html = '<a href=" ' . esc_url( $data ) . '" class="wptip-info" alt="' . esc_attr( $info->sections->description ) . '">' . esc_html( $info->name ) . '</a>';
 							break;
 
 						default:
-							echo '<span class="wptip-info">' . esc_html( $data ) . '</span>';
+							$html = '<span class="wptip-info">' . esc_html( $data ) . '</span>';
+					}
+					if ( $html ) {
+						return $html;
 					}
 				} // End if().
 			} // End if().
