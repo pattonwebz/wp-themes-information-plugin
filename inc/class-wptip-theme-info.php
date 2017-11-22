@@ -145,17 +145,36 @@ class WPTIP_Theme_Info {
 		$atts = wp_parse_args( $atts, $defaults );
 		// we always need a slug passed.
 		if ( '' !== $atts['slug'] ) {
+			/**
+			 * Since we have a slug then try get the theme info for it. The
+			 * call here should return a json object containing theme info.
+			 * It will either be pulled from a transient or make a GET request
+			 * to pull the info from remote API.
+			 */
 			$info = $this->get_theme_info( $atts['slug'] );
+
+			// $info should be an object (json object).
 			if ( is_object( $info ) ) {
+				// confirm we have a 'field' string passed.
 				if ( $atts['field'] ) {
-					// TODO: check field is valid.
+
+					/**
+					 * Check that the filed string passed is a valid field key.
+					 */
 					$field = $atts['field'];
-					// check if the field key passed is valid.
 					if ( ! $this->validate_field_id( $field ) ) {
-						// this is a fail, return false.
+						// Not valid. This is a fail. Return false.
 						return false;
 					}
+					// get the specific fields contents for use directly later.
 					$data = $info->$field;
+					/**
+					 * Depending on the type of 'field' we have sanitization
+					 * function and output methods may be different.
+					 *
+					 * This switch statement decides on the appropriate
+					 * sanitization. Defaults to 'esc_html'.
+					 */
 					switch ( $atts['field'] ) {
 
 						case 'preview_url':
@@ -186,6 +205,13 @@ class WPTIP_Theme_Info {
 
 					}
 
+					/**
+					 * The kind of sanitizer used lets us know the specific
+					 * html markup and sanitization filters to use before
+					 * returning the markup to the shortcode requester.
+					 *
+					 * Some items are numbers, others urls, defaults to html.
+					 */
 					switch ( $sanitizer ) {
 						case 'absint':
 							$html = '<span class="wptip-info">' . absint( $data ) . '</span>';
@@ -197,8 +223,16 @@ class WPTIP_Theme_Info {
 						default:
 							$html = '<span class="wptip-info">' . esc_html( $data ) . '</span>';
 					}
+					/**
+					 * If we were able to generate a string of html then return
+					 * it or else return false for failure.
+					 */
 					if ( $html ) {
+						// Success.
 						return $html;
+					} else {
+						// Fail.
+						return false;
 					}
 				} // End if().
 			} // End if().
