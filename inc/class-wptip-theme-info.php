@@ -23,17 +23,23 @@ class WPTIP_Theme_Info {
 	 */
 	public static $transient_base = 'WPTIP_themeinfo_';
 
+	/**
+	 * Holds the current instance of this class.
+	 *
+	 * @var object
+	 */
 	public static $instance = null;
+
 	/**
 	 * Initiates the class as singleton
 	 *
 	 * @return object an instance of this class.
 	 */
 	public static function init() {
-		if ( null === WPTIP_Theme_Info::$instance ) {
-			WPTIP_Theme_Info::$instance = new WPTIP_Theme_Info;
+		if ( null === self::$instance ) {
+			self::$instance = new WPTIP_Theme_Info;
 		}
-		return WPTIP_Theme_Info::$instance;
+		return self::$instance;
 	}
 
 	/**
@@ -43,12 +49,13 @@ class WPTIP_Theme_Info {
 	private function __construct() {
 		// adds a shortcode for getting individial pieces of theme info.
 		add_shortcode( 'theme-info', array( $this, 'get_with_shortcode' ) );
-		// adds a metabox for calling on edit screen.
-		add_action( 'add_meta_boxes', array( $this, 'add_themeslug_metabox' ) );
-		// an action to fire a save function for the metabox we add.
-		add_action( 'save_post',      array( $this, 'save_themeslug_metabox' ) );
 	}
 
+	/**
+	 * Function for adding a metabox in editor.
+	 *
+	 * @param string $post_type current post_type in edit screen.
+	 */
 	public function add_themeslug_metabox( $post_type ) {
 		$post_types = array( 'post', 'page', 'jetpack-portfolio' );
 		if ( in_array( $post_type, $post_types, true ) ) {
@@ -69,21 +76,16 @@ class WPTIP_Theme_Info {
 	 * @param int $post_id The ID of the post being saved.
 	 */
 	public function save_themeslug_metabox( $post_id ) {
-
 		/*
-		 * We need to verify this came from the our screen and with proper authorization,
-		 * because save_post can be triggered at other times.
+		 * We need to verify this came from the our screen and with proper
+		 * authorization, because save_post can be triggered at other times.
 		 */
-
-		// Check if our nonce is set.
-		if ( ! isset( $_POST['myplugin_inner_custom_box_nonce'] ) ) {
+		if ( ! isset( $_POST['wptip_themeslug_metabox_nonce'] ) ) {
 			return $post_id;
 		}
-
-		$nonce = $_POST['myplugin_inner_custom_box_nonce'];
-
+		$nonce = $_POST['wptip_themeslug_metabox_nonce'];
 		// Verify that the nonce is valid.
-		if ( ! wp_verify_nonce( $nonce, 'myplugin_inner_custom_box' ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'wptip_themeslug_metabox_inner_nonce' ) ) {
 			return $post_id;
 		}
 
@@ -109,10 +111,10 @@ class WPTIP_Theme_Info {
 		/* OK, it's safe for us to save the data now. */
 
 		// Sanitize the user input.
-		$mydata = sanitize_text_field( $_POST['myplugin_new_field'] );
+		$data_slug = sanitize_text_field( $_POST['wptip_slug_field'] );
 
 		// Update the meta field.
-		update_post_meta( $post_id, '_wptip_theme_slug', $mydata );
+		update_post_meta( $post_id, '_wptip_theme_slug', $data_slug );
 	}
 
 
@@ -124,17 +126,17 @@ class WPTIP_Theme_Info {
 	public function render_themeslug_metabox_content( $post ) {
 
 		// Add an nonce field so we can check for it later.
-		wp_nonce_field( 'myplugin_inner_custom_box', 'myplugin_inner_custom_box_nonce' );
+		wp_nonce_field( 'wptip_themeslug_metabox_inner_nonce', 'wptip_themeslug_metabox_nonce' );
 
 		// Use get_post_meta to retrieve an existing value from the database.
 		$value = get_post_meta( $post->ID, '_wptip_theme_slug', true );
 
 		// Display the form, using the current value.
 		?>
-		<label for="myplugin_new_field">
-			<?php _e( 'Description for this field', 'textdomain' ); ?>
+		<label for="wptip_slug_field">
+			<?php echo esc_html( 'Enter a slug for the theme to attache to this page/post/CPT.', 'wp_themes_information_plugin' ); ?>
 		</label>
-		<input type="text" id="myplugin_new_field" name="myplugin_new_field" value="<?php echo esc_attr( $value ); ?>" size="25" />
+		<input type="text" id="wptip_slug_field" name="wptip_slug_field" value="<?php echo esc_attr( $value ); ?>" size="25" />
 		<?php
 	}
 
