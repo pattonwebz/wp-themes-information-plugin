@@ -7,7 +7,7 @@
  * Author URI:      https://www.pattonwebz.com/
  * Text Domain:     wp-themes-api-plugin
  * Domain Path:     /languages
- * Version:         0.1.0
+ * Version:         0.2.0
  *
  * @package         WP_Themes_Information_Plugin
  */

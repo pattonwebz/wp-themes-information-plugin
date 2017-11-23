@@ -1,4 +1,12 @@
 <?php
+ /**
+  * The class-wptip-theme-info-widget.php file.
+  *
+  * Adds a class for dealing with a custom widget for the plugin.
+  *
+  * @since 0.2.0
+  * @package WP_Themes_Information_Plugin
+  */
 
 /**
  * Class to render a widget, it's form and to deal with saving it's data.

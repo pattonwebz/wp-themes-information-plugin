@@ -1,21 +1,43 @@
-=== Wp Themes Api Plugin ===
-Contributors: (this should be a list of wordpress.org userid's)
-Donate link: http://example.com/
-Tags: comments, spam
-Requires at least: 3.7
-Tested up to: 4.9-RC2-42149
-Stable tag: 0.1.0
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+=== WP Themes Information Plugin ===
+Contributors: williampatton
+Tags: theme-information, api, widget, shortcode
+Requires at least: 4.5
+Tested up to: 4.9
+Stable tag: 0.2.0
+License: GPLv3 or later
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
+This plugin is used to get information about a theme from the wordpress.org Themes API. It has a shortcode as well as a custom widget.
 
 == Description ==
 
-This is the long description.  No limit, and you can use Markdown (as well as in the following sections).
+Use this plugin to get theme information about a theme in the wordpress.org theme directory. Information is retrieved from the wordpress.org Themes API.
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+A meta box is added to posts, pages and jetpack portfolio post types. You can enter a specific theme slug in this box and it will be used by the custom widget if it is set on a visited page/post.
+
+A shortcode can be used to get a specific piece of information about a theme by using a shortcode like this:
+
+`[theme-info slug="theme-slug" field="downloaded"]`
+
+Supported values are as follows:
+
+```
+$array = array(
+	'name',
+	'slug',
+	'version',
+	'preview_url',
+	'author',
+	'screenshot_url',
+	'rating',
+	'num_ratings',
+	'downloaded',
+	'last_updated',
+	'homepage',
+	'download_link',
+);
+```
+
 
 A few notes about the sections above:
 
@@ -43,72 +65,15 @@ This section describes how to install the plugin and get it working.
 
 e.g.
 
-1. Upload `plugin-name.php` to the `/wp-content/plugins/` directory
+1. Upload the plugin folder to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Place `<?php do_action('plugin_name_hook'); ?>` in your templates
-
-== Frequently Asked Questions ==
-
-= A question that someone might have =
-
-An answer to that question.
-
-= What about foo bar? =
-
-Answer to foo bar dilemma.
-
-== Screenshots ==
-
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. Place a shortcode into a post or add a slug to it and add the custom widget to the sidebar
 
 == Changelog ==
 
-= 1.0 =
-* A change since the previous version.
-* Another change.
+= 0.2.0 =
+* Added custom widget.
+* Core re-factor.
 
-= 0.5 =
-* List versions from most recent at top to oldest at bottom.
-
-== Upgrade Notice ==
-
-= 1.0 =
-Upgrade notices describe the reason a user should upgrade.  No more than 300 characters.
-
-= 0.5 =
-This version fixes a security related bug.  Upgrade immediately.
-
-== Arbitrary section ==
-
-You may provide arbitrary sections, in the same format as the ones above.  This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation."  Arbitrary sections will be shown below the built-in sections outlined above.
-
-== A brief Markdown Example ==
-
-Ordered list:
-
-1. Some feature
-1. Another feature
-1. Something else about the plugin
-
-Unordered list:
-
-* something
-* something else
-* third thing
-
-Here's a link to [WordPress](http://wordpress.org/ "Your favorite software") and one to [Markdown's Syntax Documentation][markdown syntax].
-Titles are optional, naturally.
-
-[markdown syntax]: http://daringfireball.net/projects/markdown/syntax
-            "Markdown is what the parser uses to process much of the readme file"
-
-Markdown uses email style notation for blockquotes and I've been told:
-> Asterisks for *emphasis*. Double it up  for **strong**.
-
-`<?php code(); // goes in backticks ?>`
+= 0.1.0 =
+* Initial version, works with shortcode only.

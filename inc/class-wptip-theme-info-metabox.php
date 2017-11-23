@@ -1,18 +1,15 @@
 <?php
  /**
-  * The class-wptip-theme-info.php file.
+  * The class-wptip-theme-info-metabox.php file.
   *
-  * This holds a main class that can be used to get information about a theme
-  * that comes from the wordpress.org themes API. It caches calles on a theme
-  * by theme bases.
+  * Adds a metabox with some options on certain post type edit screens.
   *
+  * @since 0.2.0
   * @package WP_Themes_Information_Plugin
   */
 
 /**
- * This is a singleton class with methods to perform API calls and return
- * formatted strings via shortcode containing information about a specific
- * theme defined by a slug.
+ * Class to hold various metabox settings and render/save functions.
  */
 class WPTIP_Theme_Info_Metabox {
 
