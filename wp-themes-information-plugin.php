@@ -21,4 +21,17 @@ if ( ! defined( 'WPTIP_PLUGIN_DIR' ) ) {
 
 include WPTIP_PLUGIN_DIR . 'inc/class-wptip-theme-info.php';
 
-$wptip_info = WPTIP_Theme_Info::init();
+/**
+ * Initiate the class and add actions to put metaboxs on certain post types.
+ */
+$wptip_instance = WPTIP_Theme_Info::init();
+add_action( 'load-post.php',     'WPTIP_Theme_Info::init' ); // adds a metabox and save action on editor screen for editing posts.
+add_action( 'load-post-new.php', 'WPTIP_Theme_Info::init' ); // adds a metabox and save action on editor for new posts.
+// check if the class was instantiated because the widget class depends on it being present.
+if ( $wptip_instance instanceof WPTIP_Theme_Info ) {
+	include WPTIP_PLUGIN_DIR . 'inc/class-wptip-theme-info-widget.php';
+	function wptip_register_widget() {
+		register_widget( 'WPTIP_Theme_Info_Widget' );
+	}
+	add_action( 'widgets_init', 'wptip_register_widget' );
+}
